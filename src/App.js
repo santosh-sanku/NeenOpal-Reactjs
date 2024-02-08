@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import ProfileCard from "./components/Card/ProfileCard";
+import { initialMockData } from "./data/payload";
 
 function App() {
+  const [mockData, setMockData] = useState(initialMockData);
+
+  const handleDelete = (id) => {
+    setMockData(mockData.filter((profile) => profile.id !== id));
+  };
+
+  const handleUpdate = (id, updatedProfile) => {
+    console.log(updatedProfile);
+    setMockData(
+      mockData.map((profile) =>
+        profile.id === id ? { ...profile, ...updatedProfile } : profile
+      )
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="cards-container">
+      {mockData.map((profile) => (
+        <ProfileCard
+          key={profile.id}
+          profile={profile}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      ))}
     </div>
   );
 }
